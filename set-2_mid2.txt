@@ -1,0 +1,816 @@
+__________________________________________________
+name: Parmar Hiren D.
+mid - 2
+Set - II [soln.]
+__________________________________________________
+
+mysql --version
+mysql -u root -p
+Enter password: ********
+
+create database exam;
+
+show databases;
++--------------------+
+| Database           |
++--------------------+
+| exam               |
+| hiren              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> use exam;
+Database changed
+
+create table Customer_Master(C_No int primary key, C_Name varchar(30) not null, Gender varchar(20), DOB date, Address varchar(255), Contact_No varchar(10), Type varchar(25) not null);
+
+create table Account_Master(A_NO int, A_Type varchar(30), C_No int references Customer_Master(C_No), Open_date date, Balance varchar(10) not null);
+
+show tables;
++-----------------+
+| Tables_in_exam  |
++-----------------+
+| account_master  |
+| customer_master |
++-----------------+
+
+desc Account_Master;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| A_NO      | int         | YES  |     | NULL    |       |
+| A_Type    | varchar(30) | YES  |     | NULL    |       |
+| C_No      | int         | YES  |     | NULL    |       |
+| Open_date | date        | YES  |     | NULL    |       |
+| Balance   | varchar(10) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+
+desc Customer_Master;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| C_No       | int          | NO   | PRI | NULL    |       |
+| C_Name     | varchar(30)  | NO   |     | NULL    |       |
+| Gender     | varchar(20)  | YES  |     | NULL    |       |
+| DOB        | date         | YES  |     | NULL    |       |
+| Address    | varchar(255) | YES  |     | NULL    |       |
+| Contact_No | varchar(10)  | YES  |     | NULL    |       |
+| Type       | varchar(25)  | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+
+mysql> insert into Customer_Master(C_No,C_Name,Gender,DOB,Address,Contact_No,Type)values(101,"hiren","male","2003-08-28","Bhavnagar","9313688860","checking");
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into Customer_Master(C_No,C_Name,Gender,DOB,Address,Contact_No,Type)values(102,"yug","male","2005-12-29","Ahmedabad","9313456750","checking");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Customer_Master values(103,"pratik","male","2002-05-22","rajkot","9913315397","saving");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Customer_Master values(104,"khushi","female","2002-04-26","rajkot","9914455397","current"),(105,"viren","male","2003-08-24","baroda","1234567890","checking");
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from Customer_Master;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Bhavnagar | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.01 sec)
+
+mysql> insert into Account_Master(A_NO,A_Type,C_No,Open_Date,Balance)values(1001,"checking",101,"2022-06-05",30000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Account_Master(A_NO,A_Type,C_No,Open_Date,Balance)values(1002,"checking",102,"2023-09-05",100000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Account_Master values(1003,"saving",103,"2023-08-28",50000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Account_Master values(1004,"saving",104,"2021-08-28",79000),(1005,"current",105,"2020-12-12",40000);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from Account_Master;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 30000   |
+| 1002 | checking |  102 | 2023-09-05 | 100000  |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+********** Queries ************
+1)
+mysql> select * from Customer_Master where Gender="female" && Address="rajkot";
++------+--------+--------+------------+---------+------------+---------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type    |
++------+--------+--------+------------+---------+------------+---------+
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current |
++------+--------+--------+------------+---------+------------+---------+
+1 row in set, 1 warning (0.00 sec)
+
+2)
+mysql> update Account_Master set Balance=10000 where A_Type="checking";
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from Account_Master;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+5)
+mysql> select * from Customer_Master where Address not in("rajkot","baroda","ahmedabad");
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Bhavnagar | 9313688860 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from Customer_Master;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Bhavnagar | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+4) join
+
+SELECT Customer_Master.C_No, Account_Master.A_No FROM Customer_Master INNER JOIN Account_Master ON Customer_Master.C_Name=Account_Master.A_Type;
+
+mysql> SELECT Customer_Master.C_No, Account_Master.A_No FROM Customer_Master INNER JOIN Account_Master ON Customer_Master.C_Name=Account_Master.A_Type;
+Empty set (0.01 sec)
+
+3)
+mysql> create view hiren as select A_No, Balance from Account_Master where A_no=1005;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_exam  |
++-----------------+
+| account_master  |
+| customer_master |
+| hiren           |
++-----------------+
+3 rows in set (0.00 sec)
+
+*********** another queries***********
+
+mysql> select * from customer_master order by C_Name asc;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Bhavnagar | 9313688860 | checking |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Customer_Master order by C_No desc;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  101 | hiren  | male   | 2003-08-28 | Bhavnagar | 9313688860 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> update Customer_Master set Address="Mahuva" where C_No=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from customer_master;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Customer_Master where Address in("rajkot","baroda","ahmedabad");
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> alter table Customer_Master add Email varchar(50);
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from Customer_Master;
++------+--------+--------+------------+-----------+------------+----------+-------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     | Email |
++------+--------+--------+------------+-----------+------------+----------+-------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking | NULL  |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking | NULL  |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   | NULL  |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  | NULL  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking | NULL  |
++------+--------+--------+------------+-----------+------------+----------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table Customer_Master modify column Email varchar(60);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Customer_Master;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| C_No       | int          | NO   | PRI | NULL    |       |
+| C_Name     | varchar(30)  | NO   |     | NULL    |       |
+| Gender     | varchar(20)  | YES  |     | NULL    |       |
+| DOB        | date         | YES  |     | NULL    |       |
+| Address    | varchar(255) | YES  |     | NULL    |       |
+| Contact_No | varchar(10)  | YES  |     | NULL    |       |
+| Type       | varchar(25)  | NO   |     | NULL    |       |
+| Email      | varchar(60)  | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> alter table Customer_Master drop column Email;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Customer_Master;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| C_No       | int          | NO   | PRI | NULL    |       |
+| C_Name     | varchar(30)  | NO   |     | NULL    |       |
+| Gender     | varchar(20)  | YES  |     | NULL    |       |
+| DOB        | date         | YES  |     | NULL    |       |
+| Address    | varchar(255) | YES  |     | NULL    |       |
+| Contact_No | varchar(10)  | YES  |     | NULL    |       |
+| Type       | varchar(25)  | NO   |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> select * from Customer_Master where C_Name like'h%';
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.01 sec)
+
+mysql> select * from Customer_Master where C_Name like'h%n';
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select * from Customer_Master where C_Name like'p%k';
++------+--------+--------+------------+---------+------------+--------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type   |
++------+--------+--------+------------+---------+------------+--------+
+|  103 | pratik | male   | 2002-05-22 | rajkot  | 9913315397 | saving |
++------+--------+--------+------------+---------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> select sum(Balance) from Account_Master;
++--------------+
+| sum(Balance) |
++--------------+
+|       189000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from Account_Master;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+
+mysql> ALTER TABLE account_master MODIFY COLUMN A_NO INT PRIMARY KEY;
+Query OK, 0 rows affected (0.18 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESC ACCOUNT_MASTER;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| A_NO      | int         | NO   | PRI | NULL    |       |
+| A_Type    | varchar(30) | YES  |     | NULL    |       |
+| C_No      | int         | YES  |     | NULL    |       |
+| Open_date | date        | YES  |     | NULL    |       |
+| Balance   | varchar(10) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> ALTER TABLE ACCOUNT_MASTER ADD CONSTRAINT FKCNO FOREIGN KEY(C_NO)
+ REFERENCES CUSTOMER_MASTER(C_NO);
+Query OK, 5 rows affected (0.09 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> DESC ACCOUNT_MASTER;
++-----------+-------------+------+-----+---------+-------+
+| Field     | Type        | Null | Key | Default | Extra |
++-----------+-------------+------+-----+---------+-------+
+| A_NO      | int         | NO   | PRI | NULL    |       |
+| A_Type    | varchar(30) | YES  |     | NULL    |       |
+| C_No      | int         | YES  | MUL | NULL    |       |
+| Open_date | date        | YES  |     | NULL    |       |
+| Balance   | varchar(10) | NO   |     | NULL    |       |
++-----------+-------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
++------+--------+--------+------------+-----------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3 OFFSET 2;
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  103 | pratik | male   | 2002-05-22 | rajkot  | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+3 rows in set (0.00 sec)
+
+
+--------------------------------03-09-2024 SQL PRACTICE---------------
+mysql> SELECT * FROM ACCOUNT_MASTER;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT C_NO,C_NAME,ADDRESS FROM CUSTOMER_MASTER WHERE TYPE="CHECKIN";
+Empty set (0.00 sec)
+
+mysql> SELECT C_NO,C_NAME,ADDRESS FROM CUSTOMER_MASTER WHERE TYPE="CHECKING";
++------+--------+-----------+
+| C_NO | C_NAME | ADDRESS   |
++------+--------+-----------+
+|  101 | hiren  | Mahuva    |
+|  102 | yug    | Ahmedabad |
+|  105 | viren  | baroda    |
++------+--------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT C_NO,C_NAME,ADDRESS,TYPE FROM CUSTOMER_MASTER WHERE TYPE="
+CHECKING";
++------+--------+-----------+----------+
+| C_NO | C_NAME | ADDRESS   | TYPE     |
++------+--------+-----------+----------+
+|  101 | hiren  | Mahuva    | checking |
+|  102 | yug    | Ahmedabad | checking |
+|  105 | viren  | baroda    | checking |
++------+--------+-----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE A_TYPE="SAVING";
++------+--------+------+------------+---------+
+| A_NO | A_Type | C_No | Open_date  | Balance |
++------+--------+------+------------+---------+
+| 1003 | saving |  103 | 2023-08-28 | 50000   |
+| 1004 | saving |  104 | 2021-08-28 | 79000   |
++------+--------+------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE ADDRESS = "RAJKOT" OR ADDRESS
+="AHMEDABAD";
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
++------+--------+--------+------------+-----------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE NOT ADDRESS="RAJKOT";
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE ADDRESS ="MAHUVA" AND (ADDRESS="BARODA" OR ADDRESS="AHMEDABAD");
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE ADDRESS ="CHECKING" AND (ADDR
+ESS="BARODA" OR ADDRESS="AHMEDABAD");
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE TYPE ="CHECKING" AND (ADDRESS
+="BARODA" OR ADDRESS="AHMEDABAD");
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE TYPE ="CHECKING" AND (ADDRESS="BARODA" OR ADDRESS="RAJKOT");
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE NOT ADDRESS="AHMEDABAD" AND N
+OT ADDRESS="RAJKOT";
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER ORDER BY ADDRESS;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT * FROM CUSTOMER ORDER BY ADDRESS DESC;
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  101 | hiren   | bhavnagar | 2003-08-28 | pendrive |    1 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
+|  105 | dhara   | baroda    | 2004-04-11 | mouse    |    5 |
+|  104 | yug     | ahmedabad | 2005-12-29 | keyboard |    4 |
++------+---------+-----------+------------+----------+------+
+6 rows in set (0.02 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER ORDER BY ADDRESS DESC;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER ORDER BY ADDRESS, C_NAME;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER ORDER BY ADDRESS DESC, C_NAME ASC;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3;
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva    | 9313688860 | checking |
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
++------+--------+--------+------------+-----------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3 OFFSET 3;
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER ORDER BY LIMIT 3 DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LIMIT 3 DESC' at line 1
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3 ORDER BY DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ORDER BY DESC' at line 1
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 2 OFFSET 3 DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC' at line 1
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 2 OFFSET 3;
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 2 OFFSET 2;
++------+--------+--------+------------+---------+------------+---------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type    |
++------+--------+--------+------------+---------+------------+---------+
+|  103 | pratik | male   | 2002-05-22 | rajkot  | 9913315397 | saving  |
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current |
++------+--------+--------+------------+---------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER LIMIT 3 OFFSET 2;
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  103 | pratik | male   | 2002-05-22 | rajkot  | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot  | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda  | 1234567890 | checking |
++------+--------+--------+------------+---------+------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT MIN(BALANCE) AS BAL FROM ACCOUNT_MASTER;
++-------+
+| BAL   |
++-------+
+| 10000 |
++-------+
+1 row in set (0.01 sec)
+
+mysql> SELECT MAX(BALANCE) AS MAXBAL FROM ACCOUNT_MASTER;
++--------+
+| MAXBAL |
++--------+
+| 79000  |
++--------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(A_NO) FROM ACCOUNT_MASTER;
++-------------+
+| COUNT(A_NO) |
++-------------+
+|           5 |
++-------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT AVG(BALANCE) FROM ACCOUNT_MASTER;
++--------------+
+| AVG(BALANCE) |
++--------------+
+|        37800 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT SUM(BALANCE) FROM ACCOUNT_MASTER;
++--------------+
+| SUM(BALANCE) |
++--------------+
+|       189000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME LIKE '%h';
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME LIKE "%h";
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME LIKE "h%";
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME LIKE "h___n";
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME LIKE "h%n";
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE C_NAME NOT LIKE "h%";
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE ADDRESS IN('RAJKOT','BARODA','AHMEDABAD');
++------+--------+--------+------------+-----------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address   | Contact_No | Type     |
++------+--------+--------+------------+-----------+------------+----------+
+|  102 | yug    | male   | 2005-12-29 | Ahmedabad | 9313456750 | checking |
+|  103 | pratik | male   | 2002-05-22 | rajkot    | 9913315397 | saving   |
+|  104 | khushi | female | 2002-04-26 | rajkot    | 9914455397 | current  |
+|  105 | viren  | male   | 2003-08-24 | baroda    | 1234567890 | checking |
++------+--------+--------+------------+-----------+------------+----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CUSTOMER_MASTER WHERE ADDRESS NOT IN('RAJKOT','BARO
+DA','AHMEDABAD');
++------+--------+--------+------------+---------+------------+----------+
+| C_No | C_Name | Gender | DOB        | Address | Contact_No | Type     |
++------+--------+--------+------------+---------+------------+----------+
+|  101 | hiren  | male   | 2003-08-28 | Mahuva  | 9313688860 | checking |
++------+--------+--------+------------+---------+------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE BALANCE BETWEEN 20000 AND 9000
+0;
++------+---------+------+------------+---------+
+| A_NO | A_Type  | C_No | Open_date  | Balance |
++------+---------+------+------------+---------+
+| 1003 | saving  |  103 | 2023-08-28 | 50000   |
+| 1004 | saving  |  104 | 2021-08-28 | 79000   |
+| 1005 | current |  105 | 2020-12-12 | 40000   |
++------+---------+------+------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE BALANCE NOT BETWEEN 20000 AND
+90000;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
++------+----------+------+------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE BALANCE BETWEEN 10000 AND 7500
+0 AND A_TYPE NOT IN('SAVING');
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE A_TYPE BETWEEN 'CHECKING' AND
+'SAVING' ORDER BY A_NO;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM ACCOUNT_MASTER WHERE A_TYPE BETWEEN 'CHECKING' AND 'SAVING' ORDER BY A_TYPE;
++------+----------+------+------------+---------+
+| A_NO | A_Type   | C_No | Open_date  | Balance |
++------+----------+------+------------+---------+
+| 1001 | checking |  101 | 2022-06-05 | 10000   |
+| 1002 | checking |  102 | 2023-09-05 | 10000   |
+| 1005 | current  |  105 | 2020-12-12 | 40000   |
+| 1003 | saving   |  103 | 2023-08-28 | 50000   |
+| 1004 | saving   |  104 | 2021-08-28 | 79000   |
++------+----------+------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT A_NO AS NO,A_TYPE AS TYPE FROM ACCOUNT_MASTER;
++------+----------+
+| NO   | TYPE     |
++------+----------+
+| 1001 | checking |
+| 1002 | checking |
+| 1003 | saving   |
+| 1004 | saving   |
+| 1005 | current  |
++------+----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT ACCOUNT_MASTER.A_NO, CUSTOMER_MASTER.C_NO FROM ACCOUNT_MAS
+TER INNER JOIN CUSTOMER_MASTER ON ACCOUNT_MASTER.A_NO=CUSTOMER_MASTER.C_
+NO;
+Empty set (0.00 sec)
+
+

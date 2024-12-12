@@ -1,0 +1,248 @@
+mysql --version
+mysql -u root -p :- hiren123
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| exam               |
+| hiren              |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+6 rows in set (0.01 sec)
+
+mysql> use exam;
+Database changed
+
+mysql> create table product(pid int primary key, pname varchar(60), pcost varchar(10), pprofit varchar(10), ptype varchar(50));
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> desc product;
++---------+-------------+------+-----+---------+-------+
+| Field   | Type        | Null | Key | Default | Extra |
++---------+-------------+------+-----+---------+-------+
+| pid     | int         | NO   | PRI | NULL    |       |
+| pname   | varchar(60) | YES  |     | NULL    |       |
+| pcost   | varchar(10) | YES  |     | NULL    |       |
+| pprofit | varchar(10) | YES  |     | NULL    |       |
+| ptype   | varchar(50) | YES  |     | NULL    |       |
++---------+-------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> create table customer(cid int, cname varchar(25) not null, address varchar(255) not null, dob date, type varchar(50), pid int references product(pid));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc customer;
++---------+--------------+------+-----+---------+-------+
+| Field   | Type         | Null | Key | Default | Extra |
++---------+--------------+------+-----+---------+-------+
+| cid     | int          | YES  |     | NULL    |       |
+| cname   | varchar(25)  | NO   |     | NULL    |       |
+| address | varchar(255) | NO   |     | NULL    |       |
+| dob     | date         | YES  |     | NULL    |       |
+| type    | varchar(50)  | YES  |     | NULL    |       |
+| pid     | int          | YES  |     | NULL    |       |
++---------+--------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> insert into customer values(101,'hiren','bhavnagar','2003-08-28','pendrive',1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customer values(102,'pratik','rajkot','2002-08-28','pendrive',2);;
+Query OK, 1 row affected (0.01 sec)
+
+ERROR:
+No query specified
+
+mysql> insert into customer values(102,'pratik','rajkot','2002-08-28','pendrive',2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customer values(103,'chintan','baroda','2002-04-11','pendrive',3),(104,'yug','ahmedabad','2005-12-29','keyboard',4);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> insert into customer values(105,'dhara','baroda','2004-04-11','mouse',5);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from customer;
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  101 | hiren   | bhavnagar | 2003-08-28 | pendrive |    1 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
+|  104 | yug     | ahmedabad | 2005-12-29 | keyboard |    4 |
+|  105 | dhara   | baroda    | 2004-04-11 | mouse    |    5 |
++------+---------+-----------+------------+----------+------+
+6 rows in set (0.00 sec)
+
+mysql> insert into product values(1,'pendrive',1000,200,'electronics');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product values(2,'pendrive',1500,250,'electronics');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product values(3,'mouse',1500,300,'electronics');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product values(4,'keyboard',3500,500,'electronics');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into product values(5,'speaker',5000,300,'electronics');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from product;
++-----+----------+-------+---------+-------------+
+| pid | pname    | pcost | pprofit | ptype       |
++-----+----------+-------+---------+-------------+
+|   1 | pendrive | 1000  | 200     | electronics |
+|   2 | pendrive | 1500  | 250     | electronics |
+|   3 | mouse    | 1500  | 300     | electronics |
+|   4 | keyboard | 3500  | 500     | electronics |
+|   5 | speaker  | 5000  | 300     | electronics |
++-----+----------+-------+---------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from customer order by cname desc;
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  104 | yug     | ahmedabad | 2005-12-29 | keyboard |    4 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  101 | hiren   | bhavnagar | 2003-08-28 | pendrive |    1 |
+|  105 | dhara   | baroda    | 2004-04-11 | mouse    |    5 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
++------+---------+-----------+------------+----------+------+
+6 rows in set (0.00 sec)
+
+mysql> update product set pcost=6500 where pname='pendrive';
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> select * from product;
++-----+----------+-------+---------+-------------+
+| pid | pname    | pcost | pprofit | ptype       |
++-----+----------+-------+---------+-------------+
+|   1 | pendrive | 6500  | 200     | electronics |
+|   2 | pendrive | 6500  | 250     | electronics |
+|   3 | mouse    | 1500  | 300     | electronics |
+|   4 | keyboard | 3500  | 500     | electronics |
+|   5 | speaker  | 5000  | 300     | electronics |
++-----+----------+-------+---------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from customer where cname like 'h%';
++------+-------+-----------+------------+----------+------+
+| cid  | cname | address   | dob        | type     | pid  |
++------+-------+-----------+------------+----------+------+
+|  101 | hiren | bhavnagar | 2003-08-28 | pendrive |    1 |
++------+-------+-----------+------------+----------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from customer where cname like '%n';
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  101 | hiren   | bhavnagar | 2003-08-28 | pendrive |    1 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
++------+---------+-----------+------------+----------+------+
+2 rows in set (0.00 sec)
+
+mysql> select * from customer where cname like '%___%';
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  101 | hiren   | bhavnagar | 2003-08-28 | pendrive |    1 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
+|  104 | yug     | ahmedabad | 2005-12-29 | keyboard |    4 |
+|  105 | dhara   | baroda    | 2004-04-11 | mouse    |    5 |
++------+---------+-----------+------------+----------+------+
+6 rows in set (0.00 sec)
+
+mysql> select * from customer where cname like '___';
++------+-------+-----------+------------+----------+------+
+| cid  | cname | address   | dob        | type     | pid  |
++------+-------+-----------+------------+----------+------+
+|  104 | yug   | ahmedabad | 2005-12-29 | keyboard |    4 |
++------+-------+-----------+------------+----------+------+
+1 row in set (0.00 sec)
+
+mysql> select pcost,ptype from product;
++-------+-------------+
+| pcost | ptype       |
++-------+-------------+
+| 6500  | electronics |
+| 6500  | electronics |
+| 1500  | electronics |
+| 3500  | electronics |
+| 5000  | electronics |
++-------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select pname,pcost,ptype from product;
++----------+-------+-------------+
+| pname    | pcost | ptype       |
++----------+-------+-------------+
+| pendrive | 6500  | electronics |
+| pendrive | 6500  | electronics |
+| mouse    | 1500  | electronics |
+| keyboard | 3500  | electronics |
+| speaker  | 5000  | electronics |
++----------+-------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> select sum(pcost) from product;
++------------+
+| sum(pcost) |
++------------+
+|      23000 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> select * from customer where address in('rajkot','baroda','ahmedabad');
++------+---------+-----------+------------+----------+------+
+| cid  | cname   | address   | dob        | type     | pid  |
++------+---------+-----------+------------+----------+------+
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  102 | pratik  | rajkot    | 2002-08-28 | pendrive |    2 |
+|  103 | chintan | baroda    | 2002-04-11 | pendrive |    3 |
+|  104 | yug     | ahmedabad | 2005-12-29 | keyboard |    4 |
+|  105 | dhara   | baroda    | 2004-04-11 | mouse    |    5 |
++------+---------+-----------+------------+----------+------+
+5 rows in set (0.00 sec)
+
+mysql> alter table product add column product_description varchar(30);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc product;
++---------------------+-------------+------+-----+---------+-------+
+| Field               | Type        | Null | Key | Default | Extra |
++---------------------+-------------+------+-----+---------+-------+
+| pid                 | int         | NO   | PRI | NULL    |       |
+| pname               | varchar(60) | YES  |     | NULL    |       |
+| pcost               | varchar(10) | YES  |     | NULL    |       |
+| pprofit             | varchar(10) | YES  |     | NULL    |       |
+| ptype               | varchar(50) | YES  |     | NULL    |       |
+| product_description | varchar(30) | YES  |     | NULL    |       |
++---------------------+-------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+mysql> show tables;
++-----------------+
+| Tables_in_exam  |
++-----------------+
+| account_master  |
+| customer        |
+| customer_master |
+| hiren           |
+| product         |
++-----------------+
+5 rows in set (0.01 sec)

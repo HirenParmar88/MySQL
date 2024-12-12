@@ -1,0 +1,207 @@
+# Hiren Parmar
+# MCA23C48
+
+# 1
+create table  database1.customer (c_id int primary key, c_Name varchar(255), city varchar(100), dob date);
+
+create table database1.product (p_id int primary key, p_name varchar(255), p_cost float, p_profit float);
+
+create table database1.sales_details (s_id int primary key, c_id int, p_id int, sales varchar(255), sales_date date, foreign key(c_id) references database1.customer(c_id), foreign key(p_id) references database1.product(p_id)); 	  
+
+# 2
+create table database1.customer_master (c_no int primary key, c_name varchar(255),  gender varchar(10), dob date, city varchar(100), contact_no varchar(20));
+
+create table database1.branch_master (b_no int primary key, b_name varchar (255), location varchar(255));
+
+create table database1.account_master (a_no int primary key, a_type varchar(255), b_no int, c_no int, open_date date, current_bal float, foreign key(b_no) references database1.branch_master(b_no), foreign key(c_no) references database1.customer_master(c_no));
+
+# 3
+
+create table database1.person(pid int, name varchar(255), address varchar(255), city varchar(100));
+
+create table database1.order_display(oid int,pid int, order_price float);
+
+# 4
+
+create table database1.department(dept_no int, dname varchar(255), location varchar(255));
+
+create table database1.employee(eno int, name varchar(255), designation varchar(100), salary float, dept_no int);
+
+
+# Query.....
+
+# 1 Give branch name for branch number 1
+
+insert into database1.branch_master(b_no,b_name,location) values (1,"BOB","Bhuj");
+insert into database1.branch_master(b_no,b_name,location) values (2,"SBI","Ahmedabad");
+select b_name from database1.branch_master where b_no=1;
+
+# 2 Show all female customer names only
+
+insert into database1.customer_master(c_no,c_name,gender,dob,city,contact_no) values(1,"Customer1","male",'2002-06-15',"Bhuj","1234567890"),(2,"Customer2","female",'2002-06-16',"Ahmedabad","1234567891"),(3,"Customer3","female",'2002-06-17',"Ahmedabad1","1234567892");
+
+select * from database1.customer_master where gender = "female";
+
+# 3 Give the distinct set of all account type
+
+insert into database1.account_master(a_no,a_type,b_no,c_no,open_date,current_bal) values(1,"saving",1,1,"2020-03-17",1500);
+
+select distinct a_type from database1.account_master;
+
+# 4 Deduct 1500 rupees from account number 11
+
+update database1.account_master set current_bal = current_bal-15 where a_no=1;
+
+# 5 List all customers numbers having saving bank account only
+
+select c_no from database1.account_master where a_type="saving";
+
+select cm.c_no,cm.c_name,am.a_type from database1.customer_master as cm join database1.account_master as am on cm.c_no = am.c_no where a_type="saving";
+
+# 6 List all records where account opened date is ’30-06-2014’ or ’12-04-1986’
+select * from database1.account_master where open_date = "2014-06-30" or open_date = "1986-04-12";
+
+# 7 List all customers whose contact line series begins by 079
+select * from database1.customer_master where substring(contact_no,1,3)="079";
+
+# 8 Arrange all account details in descending order.
+select * from database1.account_master order by c_no desc;
+
+# 9 List all customer name whose last character is ‘t’ and first character is ‘b’
+select * from database1.customer_master where substring(c_name,1,1)="b" and right(c_name, 1)="t";
+
+# 10 List all records from account where account name is ‘FD’
+select * from database1.account_master where a_type="FD";
+
+# 11 Display average current balance from Account_Master 
+select avg(current_bal) as Average from database1.account_master;
+
+# 12 Show minimum and maximum current balance in one query only
+select min(current_bal) as minimum_bal,max(current_bal) as maximum_bal from database1.account_master;
+
+# 13 Return the number of rows of customer number.
+select count(*) as Count from database1.customer_master;
+
+# 14 Display total sum of current balance.
+select sum(current_bal) as Total from database1.account_master;
+
+# 15 Update branch master by changing branch name to ‘B11ADM’ for the location ‘Ahmedabad’.
+update database1.branch_master set b_name = "B11ADM" where location = "Ahmedabad" limit 1;
+
+# 16 Update customer master by changing city to ‘NY’ for customer number 11.
+update database1.customer_master set city ="NY" where c_no="1";
+
+# 17 Add a column customer_ type in customer master.
+alter table database1.customer_master add column customer_type varchar(255);
+
+# 18 Drop column customer_type from customer master.
+alter table database1.customer_master drop column customer_type;
+
+# 19 Display all the details of account master for current balance ranging from 500 to 1000.
+select * from database1.account_master where current_bal >= 500 and current_bal <= 1000;
+
+# 20 Display the customer who belongs to ‘mumbai’ or ‘pune’.
+select * from database1.customer_master where city in("mumbai","pune");
+
+# 21 List the branch name whose name begins with ‘BI’ and has four letter name
+select b_name from database1.branch_master where b_name like "bi__" ;
+
+# 22 List the customer details of the customer who are living in cities other than ‘mumbai’, ‘pune’ and ‘surat’.
+select * from database1.customer_master where city not in ("mumbai","pune","surat"); 
+
+# 23 Change the city of the customer number 11 to ‘ahmedabad’
+update database1.customer_master set city = "ahmedabad" where c_no = 5;
+
+# 24 Change the cost of ‘pen drive’ to 1500.
+insert into database1.product(p_id,p_name,p_cost,p_profit) values (1,"pen drive",5,10);
+
+update database1.product set p_cost=1500 where p_name="pen drive" limit 1;
+
+# 25 Changes profit to 1000 for the product no 11.
+update database1.product set p_profit = "1000" where p_id = 1 limit 1;
+
+# 26 Add 500 rupees to current balance where open date is in January.
+update database1.account_master set current_bal = current_bal+500 where month(open_date) = 1 limit 1;
+
+# 27 Set city to Mumbai for all customers where contact series start by 2.
+update database1.customer_master set city = "mumbai" where substring(contact_no,1,1)=2 limit 1;
+
+# 28 Remove all accounts where balance is lower than 5000.
+delete from database1.account_master where current_bal < 5000 limit 1;
+
+# 29 Count number of customer names in customer master.
+select count(*) as count from database1.account_master;
+
+# 30 List all customers in Norway and New York.
+select * from database1.customer_master where city in ("norway","New York");
+
+# 31 List all customer names in upper case only
+select upper(c_name) as Name from database1.customer_master;
+
+# 32 Display product names in lower case.
+select lower(p_name) as Name from database1.product;
+
+# 33 Write query for obtaining the following output. *****Hello
+Select "*****Hello" as output_text;
+
+# 34 Write query for obtaining the following output. Hello%%%%%
+select "Hello%%%%%" as output_text;
+
+# 35 Write query to obtain square root of 16 and 25.
+select sqrt(16), sqrt(25);
+
+# 36 Increase product cost by 2000 where profit is more than 20,000.
+update database1.product set p_cost = p_cost + 2000 where p_profit > 20000 limit 1;
+
+# 37 Display female customer details where their city name starts with A.
+select * from database1.customer_master where gender = "female" and city like "a%";
+
+# 38 Display only those customer names whose city should not be Mumbai, Pune and Rajkot.
+select * from database1.customer_master where city not in ("mumbai","pune","rajkot");
+
+# 39 Display only those branches for which name starts with ‘A’ and located in Pune only.
+select * from database1.branch_master where b_name like "a%" and location ="pune";
+
+# 40 Display the employee name working in Mumbai location.
+insert into database1.employee(eno,name,designation,salary,dept_no) values (1,"employee1","hr",10000,1);
+
+select e.name from database1.employee as e join database1.department as d on e.dept_no=d.dept_no where d.location="pune"; 
+
+# 41 Display the customer DOB for whom the profit is greater than minimum profit for product.
+select cm.dob from database1.customer_master as cm where exists (select 1 from database1.product as p where p.p_profit > (select min(p_profit) from database1.product));
+
+# 42 Display department name of all employees.
+select distinct d.dname from database1.department as d left join database1.employee as e on d.dept_no = e.dept_no where e.dept_no is not null;
+
+# 43 List department name for each employee in which they are working.
+select e.name,d.dname from database1.employee as e join database1.department as d on e.dept_no = d.dept_no;
+
+# 44 Display the employee name working in purchase department.
+select e.name from database1.employee as e join database1.department as d on e.dept_no = d.dept_no where d.dname = "purchase";
+
+# 45 Count the total number of employees working in purchase department. 
+select count(*) from database1.employee as e join database1.department as d on e.dept_no = d.dept_no where d.dname = "purchase";
+
+# 46 Display the customer name for whom the profit is greater than average profit for product
+select cm.c_name from database1.customer_master as cm where exists (select 1 from database1.product as p where p.p_profit > (select avg(p_profit)from database1.product));
+
+# 47 Count the number of persons having average order price = 20.
+select count(*) as person_count from database1.order_display as od group by od.pid having avg(order_price)=20;
+
+# 48 Create view on person of ahmedabad city.
+USE database1; 
+create view ahmedabad_person as select * from database1.person where city ="ahmedabad";
+
+# 49 Display only those customer names whose city should not be Mumbai, Pune and Rajkot.
+select c_name from database1.customer_master where city not in("Mumbai","Pune","Rajkot");
+
+# 50 Display only those product ids where profit is more than 4000 or product cost is more than 4500.
+select p_id from database1.product where p_profit > 4000 or p_cost < 45000;
+
+# 51 Create a view from product with P_Id and P_profit columns.
+USE database1; 
+create view product_view as select p_id, p_profit from database1.product;
+
+# 52 Create a view from Customer_Master having city Ahmedabad.
+use database1;
+create view ahmedabad_customer as select * from database1.customer_master where city = "Ahmedabad";
